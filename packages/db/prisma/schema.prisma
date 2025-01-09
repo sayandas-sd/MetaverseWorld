@@ -80,6 +80,6 @@ model Avatar {
 }
 
 enum Role {
-  ADmin
+  Admin
   User
 }
