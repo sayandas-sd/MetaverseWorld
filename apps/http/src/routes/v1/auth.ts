@@ -2,6 +2,8 @@ import { Router } from "express"
 import { SigninSchema, SignupSchema } from "../../types";
 import client from "@repo/db/client";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken"
+import { JWT_SECRET } from "../../config";
 
 export const authRouter = Router();
 
@@ -87,6 +89,16 @@ authRouter.post("/signin", async (req,res)=>{
                 message: "Incorrect credential"
             })
         }
+
+        const token = jwt.sign({
+            userid: userExits.id,
+            role: userExits.role
+        }, JWT_SECRET)
+
+
+        res.json({
+            token
+        })
 
     } catch(e) {
         res.status(500).json({
