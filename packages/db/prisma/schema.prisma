@@ -17,7 +17,7 @@ datasource db {
 model User{
   id        String  @id @default(cuid())
   username  String  @unique
-  passwrod  String 
+  password  String 
   role      Role
   space     Space[]
   avatarId  String
