@@ -41,9 +41,10 @@ authRouter.post("/signup", async (req, res)=>{
             data: {
                 username: parseData.data.username,
                 password: hashPass,
-                role: parseData.data.role === "admin" ?  "Admin" : "User",
+                role: parseData.data.role === "admin" ?  "Admin" : "User"
             }
         })
+
 
         res.status(200).json({
             userId: newUser.id,
@@ -74,15 +75,16 @@ authRouter.post("/signin", async (req,res)=>{
             where: {
                 username: parseData.data.username
             }
-        })
+        });
 
         if(!userExits) {
             res.status(403).json({
                 message: "User not found"
             })
+            return
         }
 
-        const validPassword = bcrypt.compare(parseData.data.password, userExits.password)
+        const validPassword = await bcrypt.compare(parseData.data.password, userExits.password)
 
         if(!validPassword) {
             res.status(403).json({
