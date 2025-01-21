@@ -1,7 +1,7 @@
 import { Router } from "express"
 import { SigninSchema, SignupSchema } from "../../types";
 import client from "@repo/db/client";
-import bcrypt from "bcrypt";
+import {hash, compare} from "../../scrypt"
 import jwt from "jsonwebtoken"
 import { JWT_SECRET } from "../../config";
 
@@ -34,8 +34,7 @@ authRouter.post("/signup", async (req, res)=>{
             return;
         }
 
-        const salt = 10;
-        const hashPass = await bcrypt.hash(parseData.data.password, salt)
+        const hashPass = await hash(parseData.data.password)
 
         const newUser = await client.user.create({
             data: {
@@ -84,7 +83,7 @@ authRouter.post("/signin", async (req,res)=>{
             return
         }
 
-        const validPassword = await bcrypt.compare(parseData.data.password, userExits.password)
+        const validPassword = await compare(parseData.data.password, userExits.password)
 
         if(!validPassword) {
             res.status(403).json({
