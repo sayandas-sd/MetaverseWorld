@@ -33,30 +33,32 @@ export const compare = async (
 ): Promise<boolean> => {
   return new Promise((resolve, reject) => {
     try {
-      // Split the stored hash into salt and derived key
       const [salt, storedKey] = hash.split(".");
-
       if (!salt || !storedKey) {
+        console.error("Invalid hash format");
         throw new Error("Invalid hash format");
       }
 
-      // Perform scrypt with the same salt
       scrypt(password, salt, keyLength, (err, derivedKey) => {
-        if (err) reject(err);
+        if (err) {
+          console.error("Error during scrypt hashing:", err);
+          reject(err);
+          return;
+        }
 
-        // Compare the derived key with the stored key securely
         const isMatch = timingSafeEqual(
           Buffer.from(storedKey, "hex"),
           derivedKey
         );
-
         resolve(isMatch);
       });
     } catch (err) {
+      console.error("Error in compare function:", err);
       reject(err);
     }
   });
 };
+
 
 // Example usage:
 (async () => {
