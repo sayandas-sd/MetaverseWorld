@@ -10,23 +10,24 @@ export const authRouter = Router();
 authRouter.post("/signup", async (req, res)=>{
 
     const parseData = SignupSchema.safeParse(req.body)
-
+   
     if (!parseData.success) {
         res.status(411).json({
             message: "validation failed"
         })
         return;
     }
-
-
+    
+    
     try {
+       
 
         const userExits = await client.user.findUnique({
             where: {
                 username: parseData.data.username
             }
         })
-
+       
         if(userExits) {
             res.status(403).json({
                 message: "email is already taken"
@@ -35,7 +36,7 @@ authRouter.post("/signup", async (req, res)=>{
         }
 
         const hashPass = await hash(parseData.data.password)
-
+       
         const newUser = await client.user.create({
             data: {
                 username: parseData.data.username,
@@ -44,7 +45,7 @@ authRouter.post("/signup", async (req, res)=>{
             }
         })
 
-
+        
         res.status(200).json({
             message: "Successfully created",
             userId: newUser.id,
@@ -93,12 +94,13 @@ authRouter.post("/signin", async (req,res)=>{
         }
 
         const token = jwt.sign({
-            userid: userExits.id,
+            userId: userExits.id,
             role: userExits.role
         }, JWT_SECRET)
 
 
         res.json({
+            message:"login Successfully",
             token
         })
 
