@@ -27,8 +27,8 @@ model User{
 model Space {
   id        String @id @default(cuid())
   name      String
-  height    String
-  Width     String
+  height    Int
+  width     Int
   thumbnail String?
   adminId   String  
   admin     User    @relation(fields: [adminId], references: [id])
@@ -47,17 +47,18 @@ model SpaceElement {
 
 model Element {
   id              String @id @default(cuid())
-  width           String 
-  height          String
+  width           Int 
+  height          Int
   imageUrl        String
+  static          Boolean
   spaceElement    SpaceElement[] 
   mapElements     MapElements[]
 }
 
 model Map {
   id            String @id @default(cuid())
-  width         String
-  height        String
+  width         Int
+  height        Int
   name          String
   mapElements   MapElements[]
 } 
