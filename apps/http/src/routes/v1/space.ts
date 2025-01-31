@@ -22,8 +22,8 @@ spaceRouter.post("/", userMiddleware, async (req,res)=>{
         await client.space.create({
             data: {
                 name: parseData.data.name,
-                width: parseData.data.dimensions.split("x")[0],
-                height: parseData.data.dimensions.split("x")[1],
+                width: parseInt(parseData.data.dimensions.split("x")[0]),
+                height: parseInt(parseData.data.dimensions.split("x")[1]),
                 adminId: req.userId as string,
             }
         })
