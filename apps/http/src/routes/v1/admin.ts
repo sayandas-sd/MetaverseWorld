@@ -5,8 +5,9 @@ import client from "@repo/db/client";
 
 export const adminRouter = Router();
 
+adminRouter.use(adminMiddleware)
 
-adminRouter.post("/element", adminMiddleware, async (req,res)=>{
+adminRouter.post("/element", async (req,res)=>{
     const parseData = CreateElementSchema.safeParse(req.body);
 
     if(!parseData.success) {
@@ -32,7 +33,7 @@ adminRouter.post("/element", adminMiddleware, async (req,res)=>{
 })
 
 
-adminRouter.put("/element/:elementId", adminMiddleware, async (req,res)=>{
+adminRouter.put("/element/:elementId", async (req,res)=>{
     const parseData = UpdateElementSchema.safeParse(req.body);
 
     if(!parseData.success) {
@@ -57,7 +58,7 @@ adminRouter.put("/element/:elementId", adminMiddleware, async (req,res)=>{
     })
 })
 
-adminRouter.post("/avatar", adminMiddleware, async (req,res)=>{
+adminRouter.post("/avatar", async (req,res)=>{
     const parseData = CreateAvatarSchema.safeParse(req.body);
 
     if(!parseData.success) {
@@ -80,7 +81,7 @@ adminRouter.post("/avatar", adminMiddleware, async (req,res)=>{
     })
 })
 
-adminRouter.post("/map", adminMiddleware, async (req,res)=>{
+adminRouter.post("/map", async (req,res)=>{
         const parseData = CreateMapSchema.safeParse(req.body)
 
         if(!parseData.success) {
