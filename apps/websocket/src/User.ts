@@ -46,7 +46,7 @@ export class User{
                     }
 
                     this.userId = userId
-                    
+
                     const space = await client.space.findFirst({
                         where: {
                             id: spaceId
@@ -84,7 +84,9 @@ export class User{
                             y: this.y
                         }
                         
-                    })
+                    }, this, this.spaceId!);
+
+                    break;
 
                 case "move": 
                     const movex = parseData.payload.x;
@@ -116,6 +118,10 @@ export class User{
 
             }
        })
+    }
+
+    destroy() {
+        Room.getInstance().removeuser(this, this.spaceId!);
     }
 
     send(payload: OutgoingMessage) {
