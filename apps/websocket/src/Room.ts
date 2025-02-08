@@ -20,6 +20,13 @@ export class Room {
         return this.instance;
     }
 
+    public removeuser(user: User, spaceId: string) {
+        if (!this.rooms.has(spaceId)) {
+            return;
+        }
+        this.rooms.set(spaceId, (this.rooms.get(spaceId)?.filter((u) => u.id !== user.id) ?? []));
+    }
+
     public addUser(spaceId: string, user: User) {
 
         if(!this.rooms.has(spaceId)) {

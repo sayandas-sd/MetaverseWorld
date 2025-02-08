@@ -22,17 +22,22 @@ export class User{
     private spaceId?: string;
     private x: number;
     private y: number;
+    private ws: WebSocket;
 
-    constructor(private ws: WebSocket) {
+    constructor(ws: WebSocket) {
         this.id = getRandomString(10);
         this.x = 0;
         this.y = 0;
+        this.ws = ws;
+        this.initHandler();
     }
 
     initHandler() {
        this.ws.on("message", async (data)=>{
+            console.log(data);
             const parseData = JSON.parse(data.toString());
-
+            console.log(parseData);
+            
             switch(parseData.type) {
 
                 case "join":
@@ -121,6 +126,13 @@ export class User{
     }
 
     destroy() {
+        Room.getInstance().broadCast({
+            type: "user-left",
+            payload: {
+                userId: this.userId,
+                 
+            }
+        }, this, this.spaceId!);
         Room.getInstance().removeuser(this, this.spaceId!);
     }
 
